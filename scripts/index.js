@@ -5,10 +5,11 @@ const cardList = document.querySelector('.places__list');
 // Function create card
 function createCard(element, removeCard) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
+  const cardImage = cardElement.querySelector('.card__image');
   const deleteButton = cardElement.querySelector('.card__delete-button');
 
-  cardElement.querySelector('.card__image').src = element.link;
-  cardElement.querySelector('.card__image').alt = element.alt;
+  cardImage.src = element.link;
+  cardImage.alt = element.alt;
   cardElement.querySelector('.card__title').textContent = element.name;
 
   deleteButton.addEventListener('click', () => removeCard(cardElement));
