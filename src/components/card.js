@@ -1,9 +1,5 @@
-// Declaring variables
-const cardTemplate = document.querySelector('#card-template').content;
-const cardList = document.querySelector('.places__list');
-
 // Function create card
-function createCard(element, removeCard) {
+function createCard(element, removeCard, cardTemplate) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const deleteButton = cardElement.querySelector('.card__delete-button');
@@ -22,10 +18,4 @@ function removeCard(item) {
   item.remove();
 }
 
-// Function render one card
-function renderCard(cardElement, cardList) {
-  cardList.append(cardElement);
-}
-
-// Displaying cards using the forEach loop
-initialCards.forEach((element) => renderCard(createCard(element, removeCard), cardList));
+export { createCard, removeCard };
