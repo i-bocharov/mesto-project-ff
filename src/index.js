@@ -22,7 +22,17 @@ function renderCard(cardElement, cardList) {
 initialCards.forEach((element) => renderCard(createCard(element, removeCard, cardTemplate, popupTypeImage, openImageModal), cardList));
 
 // Opening modal windows
-profileEditButton.addEventListener('click', () => openModal(popupTypeEdit));
+profileEditButton.addEventListener('click', () => {
+  // Получаем текущее значение имени и описания профиля
+  const profileTitle = document.querySelector('.profile__title').textContent;
+  const profileDescription = document.querySelector('.profile__description').textContent;
+
+  // Устанавливаем значения в поля ввода
+  nameInput.value = profileTitle;
+  jobInput.value = profileDescription;
+
+  openModal(popupTypeEdit);
+});
 profileAddButton.addEventListener('click', () => openModal(popupTypeNewCard));
 
 // Closing modal windows
@@ -43,3 +53,25 @@ modalPopups.forEach(modalPopup => {
     }
   });
 });
+
+// Forms
+
+const formEditProfile = document.forms['edit-profile'];
+const nameInput = formEditProfile.elements.name;
+const jobInput = formEditProfile.elements.description;
+
+function handleFormSubmit(evt) {
+    evt.preventDefault();
+
+    const dataNameInput = nameInput.value;
+    const dataJobInput = jobInput.value;
+
+    const profileTitle = document.querySelector('.profile__title');
+    const profileDescription = document.querySelector('.profile__description');
+
+    profileTitle.textContent = dataNameInput;
+    profileDescription.textContent = dataJobInput;
+    closeModal(popupTypeEdit);
+}
+
+formEditProfile.addEventListener('submit', handleFormSubmit);
