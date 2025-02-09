@@ -44,6 +44,8 @@ profileAddButton.addEventListener('click', () => openModal(popupTypeNewCard));
 modalPopups.forEach(modalPopup => {
   const popupCloseButton = modalPopup.querySelector('.popup__close');
 
+  modalPopup.classList.add('popup_is-animated');
+
   popupCloseButton.addEventListener('click', () => closeModal(modalPopup));
 
   modalPopup.addEventListener('click', (event) => {
@@ -60,7 +62,7 @@ modalPopups.forEach(modalPopup => {
 });
 
 // Function editing a profile using the form
-function handleFormSubmit(evt) {
+function hundleFormSubmitEditProfile(evt) {
     evt.preventDefault();
 
     const dataNameInput = nameInput.value;
@@ -74,29 +76,23 @@ function handleFormSubmit(evt) {
     closeModal(popupTypeEdit);
 }
 
-formEditProfile.addEventListener('submit', handleFormSubmit);
+formEditProfile.addEventListener('submit', hundleFormSubmitEditProfile);
 
 // Function adding a new card via the form
-function handleNewCardFormSubmit(evt) {
+function hundleFormSubmitNewCard(evt) {
   evt.preventDefault();
 
-  // Получаем данные из полей ввода
   const placeName = placeNameInput.value;
   const placeLink = placeLinkInput.value;
 
-  // Создаем новый элемент карточки
   const newCard = createCard({ name: placeName, link: placeLink }, removeCard, cardTemplate, popupTypeImage, openImageModal);
 
-  // Рендерим новую карточку
   renderCard(newCard, cardList);
 
-  // Сбрасываем значения полей ввода
   placeNameInput.value = '';
   placeLinkInput.value = '';
 
-  // Закрываем модальное окно
   closeModal(popupTypeNewCard);
 }
 
-// Привязываем обработчик события к форме добавления карточки
-formNewPlace.addEventListener('submit', handleNewCardFormSubmit);
+formNewPlace.addEventListener('submit', hundleFormSubmitNewCard);
