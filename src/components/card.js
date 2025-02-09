@@ -1,12 +1,15 @@
 // Function create card
-function createCard(element, removeCard, cardTemplate) {
+function createCard(data, removeCard, cardTemplate, popupTypeImage, openImageModal) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
+  const cardTitle = cardElement.querySelector('.card__title');
   const deleteButton = cardElement.querySelector('.card__delete-button');
 
-  cardImage.src = element.link;
-  cardImage.alt = element.alt;
-  cardElement.querySelector('.card__title').textContent = element.name;
+  cardImage.src = data.link;
+  cardImage.alt = data.alt;
+  cardTitle.textContent = data.name;
+
+  cardImage.addEventListener('click', () => openImageModal(popupTypeImage, data.link, data.alt, data.name));
 
   deleteButton.addEventListener('click', () => removeCard(cardElement));
 
