@@ -12,10 +12,16 @@ const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 const popupTypeImage = document.querySelector('.popup_type_image');
 const modalPopups = document.querySelectorAll('.popup');
+const formEditProfile = document.forms['edit-profile'];
+const nameInput = formEditProfile.elements.name;
+const jobInput = formEditProfile.elements.description;
+const formNewPlace  = document.forms['new-place'];
+const placeNameInput = formNewPlace.elements['place-name'];
+const placeLinkInput = formNewPlace.elements.link;
 
 // Function render one card
 function renderCard(cardElement, cardList) {
-  cardList.append(cardElement);
+  cardList.prepend(cardElement);
 }
 
 // Displaying cards using the forEach loop
@@ -23,16 +29,15 @@ initialCards.forEach((element) => renderCard(createCard(element, removeCard, car
 
 // Opening modal windows
 profileEditButton.addEventListener('click', () => {
-  // Получаем текущее значение имени и описания профиля
   const profileTitle = document.querySelector('.profile__title').textContent;
   const profileDescription = document.querySelector('.profile__description').textContent;
 
-  // Устанавливаем значения в поля ввода
   nameInput.value = profileTitle;
   jobInput.value = profileDescription;
 
   openModal(popupTypeEdit);
 });
+
 profileAddButton.addEventListener('click', () => openModal(popupTypeNewCard));
 
 // Closing modal windows
@@ -54,12 +59,7 @@ modalPopups.forEach(modalPopup => {
   });
 });
 
-// Forms
-
-const formEditProfile = document.forms['edit-profile'];
-const nameInput = formEditProfile.elements.name;
-const jobInput = formEditProfile.elements.description;
-
+// Function editing a profile using the form
 function handleFormSubmit(evt) {
     evt.preventDefault();
 
@@ -75,3 +75,28 @@ function handleFormSubmit(evt) {
 }
 
 formEditProfile.addEventListener('submit', handleFormSubmit);
+
+// Function adding a new card via the form
+function handleNewCardFormSubmit(evt) {
+  evt.preventDefault();
+
+  // Получаем данные из полей ввода
+  const placeName = placeNameInput.value;
+  const placeLink = placeLinkInput.value;
+
+  // Создаем новый элемент карточки
+  const newCard = createCard({ name: placeName, link: placeLink }, removeCard, cardTemplate, popupTypeImage, openImageModal);
+
+  // Рендерим новую карточку
+  renderCard(newCard, cardList);
+
+  // Сбрасываем значения полей ввода
+  placeNameInput.value = '';
+  placeLinkInput.value = '';
+
+  // Закрываем модальное окно
+  closeModal(popupTypeNewCard);
+}
+
+// Привязываем обработчик события к форме добавления карточки
+formNewPlace.addEventListener('submit', handleNewCardFormSubmit);
