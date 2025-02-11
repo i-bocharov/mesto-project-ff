@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
-import { createCard, removeCard } from './components/card.js';
-import { openModal, closeModal, openImageModal } from './components/modal.js';
+import { createCard, deleteCard, likeCard } from './components/card.js';
+import { openModal, closeModal } from './components/modal.js';
 
 // Declaring variables
 const cardTemplate = document.querySelector('#card-template').content;
@@ -18,6 +18,57 @@ const jobInput = formEditProfile.elements.description;
 const formNewPlace  = document.forms['new-place'];
 const placeNameInput = formNewPlace.elements['place-name'];
 const placeLinkInput = formNewPlace.elements.link;
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+const popupImage = popupTypeImage.querySelector('.popup__image');
+const popupCaption = popupTypeImage.querySelector('.popup__caption');
+
+// Function for handling Escape key
+export function handleEscapeKey(event) {
+  if (event.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_is-opened');
+
+    closeModal(openedPopup);
+  }
+}
+
+// Function editing a profile using the form
+function handleFormSubmitEditProfile(evt) {
+    evt.preventDefault();
+
+    const dataNameInput = nameInput.value;
+    const dataJobInput = jobInput.value;
+
+    profileTitle.textContent = dataNameInput;
+    profileDescription.textContent = dataJobInput;
+
+    closeModal(popupTypeEdit);
+}
+
+// Function adding a new card via the form
+function handleFormSubmitNewCard(evt) {
+  evt.preventDefault();
+
+  const placeName = placeNameInput.value;
+  const placeLink = placeLinkInput.value;
+
+  const newCard = createCard({ name: placeName, link: placeLink }, cardTemplate, { deleteCard, likeCard, handleImageClick });
+
+  renderCard(newCard, cardList);
+
+  evt.target.reset();
+
+  closeModal(popupTypeNewCard);
+}
+
+// Function open image modal
+function handleImageClick(imageLink, imageAlt, imageName) {
+  popupImage.src = imageLink;
+  popupImage.alt = imageAlt;
+  popupCaption.textContent = imageName;
+
+  openModal(popupTypeImage);
+}
 
 // Function render one card
 function renderCard(cardElement, cardList) {
@@ -25,22 +76,20 @@ function renderCard(cardElement, cardList) {
 }
 
 // Displaying cards using the forEach loop
-initialCards.forEach((element) => renderCard(createCard(element, removeCard, cardTemplate, popupTypeImage, openImageModal), cardList));
+initialCards.forEach((element) => renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList));
 
-// Opening modal windows
+// Opening modal windows edit profile
 profileEditButton.addEventListener('click', () => {
-  const profileTitle = document.querySelector('.profile__title').textContent;
-  const profileDescription = document.querySelector('.profile__description').textContent;
-
-  nameInput.value = profileTitle;
-  jobInput.value = profileDescription;
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
 
   openModal(popupTypeEdit);
 });
 
+// Opening modal window add new card
 profileAddButton.addEventListener('click', () => openModal(popupTypeNewCard));
 
-// Closing modal windows
+// Closing all modal windows
 modalPopups.forEach(modalPopup => {
   const popupCloseButton = modalPopup.querySelector('.popup__close');
 
@@ -53,46 +102,12 @@ modalPopups.forEach(modalPopup => {
       closeModal(modalPopup);
     }
   });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeModal(modalPopup);
-    }
-  });
 });
 
-// Function editing a profile using the form
-function hundleFormSubmitEditProfile(evt) {
-    evt.preventDefault();
+// Handle form submit edit profile
+formEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
 
-    const dataNameInput = nameInput.value;
-    const dataJobInput = jobInput.value;
+// Handle form submit new card
+formNewPlace.addEventListener('submit', handleFormSubmitNewCard);
 
-    const profileTitle = document.querySelector('.profile__title');
-    const profileDescription = document.querySelector('.profile__description');
-
-    profileTitle.textContent = dataNameInput;
-    profileDescription.textContent = dataJobInput;
-    closeModal(popupTypeEdit);
-}
-
-formEditProfile.addEventListener('submit', hundleFormSubmitEditProfile);
-
-// Function adding a new card via the form
-function hundleFormSubmitNewCard(evt) {
-  evt.preventDefault();
-
-  const placeName = placeNameInput.value;
-  const placeLink = placeLinkInput.value;
-
-  const newCard = createCard({ name: placeName, link: placeLink }, removeCard, cardTemplate, popupTypeImage, openImageModal);
-
-  renderCard(newCard, cardList);
-
-  placeNameInput.value = '';
-  placeLinkInput.value = '';
-
-  closeModal(popupTypeNewCard);
-}
-
-formNewPlace.addEventListener('submit', hundleFormSubmitNewCard);
+// export { handleEscapeKey };
