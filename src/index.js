@@ -23,15 +23,6 @@ const profileDescription = document.querySelector('.profile__description');
 const popupImage = popupTypeImage.querySelector('.popup__image');
 const popupCaption = popupTypeImage.querySelector('.popup__caption');
 
-// Function for handling Escape key
-export function handleEscapeKey(event) {
-  if (event.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_is-opened');
-
-    closeModal(openedPopup);
-  }
-}
-
 // Function editing a profile using the form
 function handleFormSubmitEditProfile(evt) {
     evt.preventDefault();
@@ -109,5 +100,3 @@ formEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
 
 // Handle form submit new card
 formNewPlace.addEventListener('submit', handleFormSubmitNewCard);
-
-// export { handleEscapeKey };
