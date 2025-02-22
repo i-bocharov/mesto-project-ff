@@ -6,6 +6,8 @@
   color: #ff0000;
   opacity: 0;
   font-size: 12px;
+  display: block;
+  min-height: 34px;
 }
 
 .form__input-error_active {
