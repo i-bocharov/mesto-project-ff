@@ -2,6 +2,7 @@ import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
+import { cards, userInfo } from './scripts/api.js';
 
 // Declaring variables
 const cardTemplate = document.querySelector('#card-template').content;
@@ -18,6 +19,7 @@ const jobInput = formEditProfile.elements.description;
 const formNewPlace  = document.forms['new-place'];
 const placeNameInput = formNewPlace.elements['place-name'];
 const placeLinkInput = formNewPlace.elements.link;
+const profileAvatar = document.querySelector('.profile__image');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const popupImage = popupTypeImage.querySelector('.popup__image');
@@ -196,3 +198,6 @@ const validationConfig = {
 }
 
 enableValidation(validationConfig);
+
+cards();
+userInfo(profileTitle, profileDescription, profileAvatar);
