@@ -50,4 +50,22 @@ function sendUserData(userNameData, userAboutData) {
   });
 }
 
-export { getCardsData, getUserData, sendUserData };
+function postNewCard(cardNameData, cardLinkData) {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'POST',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: cardNameData,
+      link: cardLinkData
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+}
+
+export { getCardsData, getUserData, sendUserData, postNewCard };

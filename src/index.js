@@ -2,7 +2,7 @@ import './pages/index.css';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
-import { getCardsData, getUserData, sendUserData } from './scripts/api.js';
+import { getCardsData, getUserData, sendUserData, postNewCard } from './scripts/api.js';
 
 // Declaring variables
 const cardTemplate = document.querySelector('#card-template').content;
@@ -29,13 +29,13 @@ const popupCaption = popupTypeImage.querySelector('.popup__caption');
 function handleFormSubmitEditProfile(evt) {
     evt.preventDefault();
 
-    const dataNameInput = nameInput.value;
-    const dataJobInput = jobInput.value;
+    profileTitle.textContent = nameInput.value;
+    profileDescription.textContent = jobInput.value;
 
-    profileTitle.textContent = dataNameInput;
-    profileDescription.textContent = dataJobInput;
-
-    sendUserData(profileTitle.textContent, profileDescription.textContent);
+    sendUserData(profileTitle.textContent, profileDescription.textContent)
+      .catch((err) => {
+        console.log(err);
+      });
 
     closeModal(popupTypeEdit);
 }
@@ -50,6 +50,11 @@ function handleFormSubmitNewCard(evt) {
   const newCard = createCard({ name: placeName, link: placeLink }, cardTemplate, { deleteCard, likeCard, handleImageClick });
 
   renderCard(newCard, cardList);
+
+  postNewCard(placeName, placeLink)
+    .catch((err) => {
+      console.log(err);
+    });
 
   closeModal(popupTypeNewCard);
 }
@@ -136,7 +141,9 @@ Promise.all([getUserData(), getCardsData()])
     profileAvatar.style.backgroundImage = "url(" + userData.avatar + ")";
 
     // Uploading the cards to the page
-    cardsData.forEach((element) => {
+    const sortedCards = cardsData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    sortedCards.forEach((element) => {
       renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList);
     });
   })
