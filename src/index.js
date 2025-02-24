@@ -2,7 +2,8 @@ import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
-import { cards, userInfo } from './scripts/api.js';
+import { enableValidation, clearValidation } from './scripts/validation.js';
+import { getDataCards, getDataUser } from './scripts/api.js';
 
 // Declaring variables
 const cardTemplate = document.querySelector('#card-template').content;
@@ -49,8 +50,6 @@ function handleFormSubmitNewCard(evt) {
 
   renderCard(newCard, cardList);
 
-  evt.target.reset();
-
   closeModal(popupTypeNewCard);
 }
 
@@ -71,7 +70,8 @@ function renderCard(cardElement, cardList) {
 // Displaying cards using the forEach loop
 initialCards.forEach((element) => renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList));
 
-function openProfilePopap() {
+// Function open profile popup
+function openProfilePopup() {
   clearValidation(formEditProfile, validationConfig);
 
   nameInput.value = profileTitle.textContent;
@@ -80,13 +80,18 @@ function openProfilePopap() {
   openModal(popupTypeEdit);
 }
 
+// Function open new card popup
+function openNewCardPopup() {
+  clearValidation(formNewPlace, validationConfig);
+
+  openModal(popupTypeNewCard);
+}
+
 // Opening modal windows edit profile
-profileEditButton.addEventListener('click', openProfilePopap);
+profileEditButton.addEventListener('click', openProfilePopup);
 
 // Opening modal window add new card
-profileAddButton.addEventListener('click', () => {
-  openModal(popupTypeNewCard);
-});
+profileAddButton.addEventListener('click', openNewCardPopup);
 
 // Closing all modal windows
 modalPopups.forEach(modalPopup => {
@@ -94,7 +99,9 @@ modalPopups.forEach(modalPopup => {
 
   modalPopup.classList.add('popup_is-animated');
 
-  popupCloseButton.addEventListener('click', () => closeModal(modalPopup));
+  popupCloseButton.addEventListener('click', () => {
+    closeModal(modalPopup);
+  });
 
   modalPopup.addEventListener('click', (event) => {
     if (event.target === modalPopup) {
@@ -109,85 +116,7 @@ formEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
 // Handle form submit new card
 formNewPlace.addEventListener('submit', handleFormSubmitNewCard);
 
-
-
-// Validation
-function showInputError(formElement, inputElement, errorMessage, validationConfig) {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-
-  inputElement.classList.add(validationConfig.inputErrorClass);
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add(validationConfig.errorClass);
-};
-
-function hideInputError(formElement, inputElement, validationConfig) {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-
-  inputElement.classList.remove(validationConfig.inputErrorClass);
-  errorElement.classList.remove(validationConfig.errorClass);
-  errorElement.textContent = '';
-}
-
-function isValid(formElement, inputElement, validationConfig) {
-  if (inputElement.validity.patternMismatch) {
-    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-  } else {
-    inputElement.setCustomValidity('');
-  }
-
-  if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
-  } else {
-    hideInputError(formElement, inputElement, validationConfig);
-  }
-}
-
-function setEventListeners(formElement, validationConfig) {
-  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
-  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
-
-  toggleButtonState(inputList, buttonElement);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', () => {
-      isValid(formElement, inputElement, validationConfig);
-      toggleButtonState(inputList, buttonElement);
-    });
-  });
-}
-
-function enableValidation(validationConfig) {
-  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
-
-  formList.forEach((formElement) => {
-    setEventListeners(formElement, validationConfig);
-  });
-}
-
-function hasInvalidInput(inputList) {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  })
-}
-
-function toggleButtonState(inputList, buttonElement) {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.disabled = true;
-  } else {
-    buttonElement.disabled = false;
-  }
-}
-
-function clearValidation(formElement, validationConfig) {
-  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
-  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
-
-  inputList.forEach((inputElement) => {
-    hideInputError(formElement, inputElement, validationConfig);
-  });
-
-  toggleButtonState(inputList, buttonElement);
-}
-
+// Declaring variables validationConfig
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -197,7 +126,25 @@ const validationConfig = {
   errorClass: 'form__input-error_active'
 }
 
+//Calling the enableValidation function
 enableValidation(validationConfig);
 
-cards();
-userInfo(profileTitle, profileDescription, profileAvatar);
+
+//API
+getDataCards()
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+
+getDataUser()
+            .then((data) => {
+              profileTitle.textContent = data.name;
+              profileDescription.textContent = data.about;
+              profileAvatar.style.backgroundImage = "url(" + data.avatar + ")";
+            })
+            .catch((err) => {
+              console.log(err);
+            });

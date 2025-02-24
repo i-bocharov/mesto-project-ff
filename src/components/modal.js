@@ -8,6 +8,11 @@ function openModal(element) {
 function closeModal(element) {
   element.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', handleEscapeKey);
+
+  if (element.classList.contains('popup_type_new-card')) {
+    const formNewPlace = document.forms['new-place'];
+    formNewPlace.reset();
+  }
 }
 
 // Function for handling Escape key

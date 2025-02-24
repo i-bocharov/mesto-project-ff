@@ -1,27 +1,35 @@
-function cards() {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-33/cards', {
-    headers: {
-      authorization: '3c96d569-9b34-4210-be91-2190c5f8004c'
-    }
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-33',
+  headers: {
+    authorization: '3c96d569-9b34-4210-be91-2190c5f8004c',
+    'Content-Type': 'application/json'
+  }
+}
+
+function getDataCards() {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
   })
-    .then(res => res.json())
-    .then((result) => {
-      console.log(result);
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
     });
 }
 
-function userInfo (profileTitle, profileDescription, profileAvatar) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-33/users/me', {
-    headers: {
-      authorization: '3c96d569-9b34-4210-be91-2190c5f8004c'
-    }
+function getDataUser () {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers
   })
-    .then(res => res.json())
-    .then((result) => {
-      profileTitle.textContent = result.name;
-      profileDescription.textContent = result.about;
-      profileAvatar.style.backgroundImage = "url(" + result.avatar + ")";
-    })
-  }
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
 
-export { cards, userInfo };
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+export { getDataCards, getDataUser };
