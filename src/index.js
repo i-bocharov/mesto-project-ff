@@ -2,7 +2,7 @@ import './pages/index.css';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
-import { getDataCards, getDataUser } from './scripts/api.js';
+import { getCardsData, getUserData, sendUserData } from './scripts/api.js';
 
 // Declaring variables
 const cardTemplate = document.querySelector('#card-template').content;
@@ -34,6 +34,8 @@ function handleFormSubmitEditProfile(evt) {
 
     profileTitle.textContent = dataNameInput;
     profileDescription.textContent = dataJobInput;
+
+    sendUserData(profileTitle.textContent, profileDescription.textContent);
 
     closeModal(popupTypeEdit);
 }
@@ -125,12 +127,9 @@ const validationConfig = {
 //Calling the enableValidation function
 enableValidation(validationConfig);
 
-
-//API
-
 // API calls combined using Promise.all
-Promise.all([getDataCards(), getDataUser()])
-  .then(([cardsData, userData]) => {
+Promise.all([getUserData(), getCardsData()])
+  .then(([userData, cardsData]) => {
     // Updating profile information
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;

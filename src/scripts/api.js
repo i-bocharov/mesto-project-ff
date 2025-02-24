@@ -6,7 +6,7 @@ const config = {
   }
 }
 
-function getDataCards() {
+function getCardsData() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
@@ -19,7 +19,7 @@ function getDataCards() {
     });
 }
 
-function getDataUser () {
+function getUserData() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
@@ -32,4 +32,22 @@ function getDataUser () {
     });
 }
 
-export { getDataCards, getDataUser };
+function sendUserData(userNameData, userAboutData) {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: userNameData,
+      about: userAboutData
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+}
+
+export { getCardsData, getUserData, sendUserData };
