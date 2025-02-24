@@ -1,5 +1,4 @@
 import './pages/index.css';
-// import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
@@ -67,9 +66,6 @@ function renderCard(cardElement, cardList) {
   cardList.prepend(cardElement);
 }
 
-// Displaying cards using the forEach loop
-// initialCards.forEach((element) => renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList));
-
 // Function open profile popup
 function openProfilePopup() {
   clearValidation(formEditProfile, validationConfig);
@@ -131,23 +127,20 @@ enableValidation(validationConfig);
 
 
 //API
-getDataCards()
-              .then((data) => {
-                data.forEach((element) => {
-                  // const newCard = createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick });
-                  renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList);
-                });
-              })
-              .catch((err) => {
-                console.log(err);
-              });
 
-getDataUser()
-            .then((data) => {
-              profileTitle.textContent = data.name;
-              profileDescription.textContent = data.about;
-              profileAvatar.style.backgroundImage = "url(" + data.avatar + ")";
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+// API calls combined using Promise.all
+Promise.all([getDataCards(), getDataUser()])
+  .then(([cardsData, userData]) => {
+    // Updating profile information
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileAvatar.style.backgroundImage = "url(" + userData.avatar + ")";
+
+    // Uploading the cards to the page
+    cardsData.forEach((element) => {
+      renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
