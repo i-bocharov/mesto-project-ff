@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { initialCards } from './scripts/cards.js';
+// import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
@@ -68,7 +68,7 @@ function renderCard(cardElement, cardList) {
 }
 
 // Displaying cards using the forEach loop
-initialCards.forEach((element) => renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList));
+// initialCards.forEach((element) => renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList));
 
 // Function open profile popup
 function openProfilePopup() {
@@ -133,7 +133,10 @@ enableValidation(validationConfig);
 //API
 getDataCards()
               .then((data) => {
-                console.log(data);
+                data.forEach((element) => {
+                  // const newCard = createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick });
+                  renderCard(createCard(element, cardTemplate, { deleteCard, likeCard, handleImageClick }), cardList);
+                });
               })
               .catch((err) => {
                 console.log(err);
