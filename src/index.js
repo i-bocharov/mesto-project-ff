@@ -47,14 +47,18 @@ function handleFormSubmitNewCard(evt) {
   const placeName = placeNameInput.value;
   const placeLink = placeLinkInput.value;
 
-  const newCard = createCard({ name: placeName, link: placeLink }, cardTemplate, { deleteCard, likeCard, handleImageClick });
+  // const newCard = createCard({ name: placeName, link: placeLink }, cardTemplate, { deleteCard, likeCard, handleImageClick });
 
-  renderCard(newCard, cardList);
+  // renderCard(newCard, cardList);
 
   postNewCard(placeName, placeLink)
-  .catch((err) => {
-    console.log(err);
-  });
+    .then((newCardData) => {
+      const newCard = createCard(newCardData, cardTemplate, { deleteCard, likeCard, handleImageClick });
+      renderCard(newCard, cardList);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   closeModal(popupTypeNewCard);
 }
