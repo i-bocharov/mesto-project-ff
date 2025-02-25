@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 3px;
 }
 
 .card__like-button {
@@ -26,5 +27,5 @@
 }
 
 .card__like-counter {
-
+  font-size: 13px;
 }

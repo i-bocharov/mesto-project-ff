@@ -6,6 +6,7 @@ function createCard(data, cardTemplate, { deleteCard, likeCard, handleImageClick
   const cardTitle = cardElement.querySelector('.card__title');
   const cardLikeButton = cardElement.querySelector('.card__like-button');
   const deleteButton = cardElement.querySelector('.card__delete-button');
+  const cardLikeCounter = cardElement.querySelector('.card__like-counter');
 
   cardImage.src = data.link;
   cardImage.alt = data.alt;
@@ -13,7 +14,19 @@ function createCard(data, cardTemplate, { deleteCard, likeCard, handleImageClick
 
   deleteButton.addEventListener('click', () => deleteCard(cardElement));
 
-  cardLikeButton.addEventListener('click', () => likeCard(cardLikeButton));
+  // Установка количества лайков
+  cardLikeCounter.textContent = data.likes.length;
+
+  cardLikeButton.addEventListener('click', () => {
+    likeCard(cardLikeButton);
+
+    // Увеличиваем/уменьшаем количество лайков при нажатии
+    if (cardLikeButton.classList.contains('card__like-button_is-active')) {
+      cardLikeCounter.textContent = parseInt(cardLikeCounter.textContent) + 1; // Увеличиваем количество
+    } else {
+      cardLikeCounter.textContent = parseInt(cardLikeCounter.textContent) - 1; // Уменьшаем количество
+    }
+  });
 
   cardImage.addEventListener('click', () => handleImageClick(data.link, data.alt, data.name));
 
