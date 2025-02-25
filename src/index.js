@@ -52,9 +52,9 @@ function handleFormSubmitNewCard(evt) {
   renderCard(newCard, cardList);
 
   postNewCard(placeName, placeLink)
-    .catch((err) => {
-      console.log(err);
-    });
+  .catch((err) => {
+    console.log(err);
+  });
 
   closeModal(popupTypeNewCard);
 }
