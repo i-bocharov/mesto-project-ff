@@ -52,10 +52,9 @@
           type="url"
           name="avatar-link"
           class="popup__input popup__input_type_new-avatar"
-          placeholder="Введите url картинки на аватар"
-          minlength=""
-          maxlength=""
-          data-error-message=""
+          placeholder="Введите url картинки"
+          pattern="https?://[^\s]+?(?:\.(?:jpg|jpeg|png|gif|webp|svg))(?:\?[^\s]*)?"
+          data-error-message="Введите ссылку на картинку с расширением (jpg | jpeg | png | gif | webp | svg)"
           required
         >
         <span class="avatar-link-input-error form__input-error"></span>

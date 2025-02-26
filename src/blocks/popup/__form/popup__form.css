@@ -2,6 +2,10 @@
   margin-top: 27px;
 }
 
+.popup_type_new-avatar .popup__form {
+  margin-top: 37px;
+}
+
 .form__input-error {
   color: #ff0000;
   opacity: 0;
@@ -12,4 +16,8 @@
 
 .form__input-error_active {
   opacity: 1;
+}
+
+.popup_type_new-avatar .form__input-error {
+  margin-bottom: 8px;
 }
