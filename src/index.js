@@ -55,6 +55,19 @@ const validationConfig = {
 // Включение валидации
 enableValidation(validationConfig);
 
+// Функция для вывода информации о сохранении при нажатии на кнопку
+function loadingButton(isLoading) {
+  const popupButtons = document.querySelectorAll('.popup__button');
+
+  popupButtons.forEach((popupButton) => {
+    if (isLoading) {
+      popupButton.textContent = 'Сохранение...'
+    } else {
+      popupButton.textContent = 'Сохранить'
+    }
+  })
+}
+
 // Функция для обработки отправки формы редактирования профиля
 function handleFormSubmitEditProfile(evt) {
     evt.preventDefault();
@@ -62,12 +75,17 @@ function handleFormSubmitEditProfile(evt) {
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
 
+    loadingButton(true);
+
     sendUserData(profileTitle.textContent, profileDescription.textContent)
       .then(() => {
         closeModal(popupTypeEdit);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        loadingButton(false);
       });
 }
 
@@ -77,6 +95,8 @@ function handleFormSubmitNewCard(evt) {
 
   const placeName = placeNameInput.value.trim();
   const placeLink = placeLinkInput.value.trim();
+
+  loadingButton(true);
 
   postNewCard(placeName, placeLink)
     .then((newCardData) => {
@@ -90,6 +110,9 @@ function handleFormSubmitNewCard(evt) {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      loadingButton(false);
     });
 
   closeModal(popupTypeNewCard);
@@ -100,6 +123,8 @@ function handleFormSubmitNewAvatar(evt) {
   evt.preventDefault();
   const newAvatarUrl = avatarLinkInput.value.trim();
 
+  loadingButton(true);
+
   sendUserAvatar(newAvatarUrl)
     .then((userData) => {
       profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
@@ -108,6 +133,9 @@ function handleFormSubmitNewAvatar(evt) {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      loadingButton(false);
     });
 }
 
