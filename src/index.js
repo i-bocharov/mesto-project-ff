@@ -18,6 +18,7 @@ const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
+const profileAvatarEditButton = document.querySelector('.profile__avatar-edit-icon');
 const profileAvatar = document.querySelector('.profile__image');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
@@ -147,7 +148,7 @@ function openNewCardPopup() {
 // Слушатели событий
 profileEditButton.addEventListener('click', openProfilePopup);
 profileAddButton.addEventListener('click', openNewCardPopup);
-profileAvatar.addEventListener('click', () => {
+profileAvatarEditButton.addEventListener('click', () => {
   clearValidation(formNewAvatar, validationConfig);
   openModal(popupTypeNewAvatar);
 });
