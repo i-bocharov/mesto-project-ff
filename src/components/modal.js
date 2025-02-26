@@ -11,7 +11,14 @@ function closeModal(element) {
 
   if (element.classList.contains('popup_type_new-card')) {
     const formNewPlace = document.forms['new-place'];
+
     formNewPlace.reset();
+  }
+
+  if (element.classList.contains('popup_type_new-avatar')) {
+    const formNewAvatar = document.forms['new-avatar'];
+
+    formNewAvatar.reset();
   }
 }
 
