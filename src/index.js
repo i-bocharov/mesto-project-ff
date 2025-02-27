@@ -106,7 +106,7 @@ function handleFormSubmitNewCard(evt) {
         handleImageClick
       });
 
-      renderCard(newCard, cardList);
+      cardList.prepend(newCard);
     })
     .catch((err) => {
       console.log(err);
@@ -149,11 +149,6 @@ function handleImageClick(imageLink, imageAlt, imageName) {
   popupCaption.textContent = imageName;
 
   openModal(popupTypeImage);
-}
-
-// Функция для рендеринга одной карточки
-function renderCard(cardElement, cardList) {
-  cardList.prepend(cardElement);
 }
 
 // Функция для открытия модального окна редактирования профиля
@@ -210,9 +205,7 @@ Promise.all([getUserData(), getCardsData()])
     profileDescription.textContent = user.about;
     profileAvatar.style.backgroundImage = `url(${user.avatar})`;
 
-    const sortedCards = cards.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-
-    sortedCards.forEach((cardData) => {
+    cards.forEach((cardData) => {
       if (!cardData || !cardData.link || !cardData.name || !cardData.owner || !cardData.likes) {
         console.error('Некорректные данные карточки:', cardData);
         return; // Пропускаем карточку с некорректными данными
@@ -223,7 +216,8 @@ Promise.all([getUserData(), getCardsData()])
         likeCard: (cardId, cardLikeButton, cardLikeCounter) => handleCardLike(cardId, cardLikeButton, cardLikeCounter, putCardLike, deleteCardLike),
         handleImageClick
       });
-      renderCard(cardElement, cardList);
+
+      cardList.append(cardElement);
     });
   })
   .catch((err) => {
