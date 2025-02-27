@@ -72,13 +72,16 @@ function loadingButton(isLoading) {
 function handleFormSubmitEditProfile(evt) {
     evt.preventDefault();
 
-    profileTitle.textContent = nameInput.value;
-    profileDescription.textContent = jobInput.value;
+    const newName = nameInput.value;
+    const newAbout = jobInput.value;
 
     loadingButton(true);
 
-    sendUserData(profileTitle.textContent, profileDescription.textContent)
-      .then(() => {
+    sendUserData(newName, newAbout)
+      .then((userData) => {
+        profileTitle.textContent = userData.name;
+        profileDescription.textContent = userData.about;
+
         closeModal(popupTypeEdit);
       })
       .catch((err) => {
@@ -107,6 +110,10 @@ function handleFormSubmitNewCard(evt) {
       });
 
       cardList.prepend(newCard);
+
+      evt.target.reset();
+
+      closeModal(popupTypeNewCard);
     })
     .catch((err) => {
       console.log(err);
@@ -114,8 +121,6 @@ function handleFormSubmitNewCard(evt) {
     .finally(() => {
       loadingButton(false);
     });
-
-  closeModal(popupTypeNewCard);
 }
 
 // Функция для обработки отправки формы изменения аватара
@@ -128,6 +133,8 @@ function handleFormSubmitNewAvatar(evt) {
   sendUserAvatar(newAvatarUrl)
     .then((userData) => {
       profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
+
+      evt.target.reset();
 
       closeModal(popupTypeNewAvatar);
     })
@@ -162,7 +169,7 @@ function openProfilePopup() {
 }
 
 // Функция для открытия модального окна создания новой карточки
-function openNewCardPopup() {
+function openNewCardPopup(evt) {
   clearValidation(formNewPlace, validationConfig);
 
   openModal(popupTypeNewCard);
