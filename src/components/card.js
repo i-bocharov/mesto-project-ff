@@ -72,14 +72,5 @@ function handleCardLike(cardElement, cardId, userId, putCardLike, deleteCardLike
       });
   }
 }
-// Function remove card
-function deleteCard(element) {
-  element.remove();
-}
-
-// Function like card
-function likeCard(element) {
-  element.classList.toggle('card__like-button_is-active');
-}
 
 export { createCard, handleCardDelete, handleCardLike };
