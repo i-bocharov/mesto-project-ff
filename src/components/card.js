@@ -21,14 +21,14 @@ function createCard(data, cardTemplate, userId, { deleteCard, likeCard, handleIm
   }
 
   // Проверка, поставлен ли лайк текущим пользователем
-  const isLiked = data.likes.some(like => like._id === userId); // Проверяем наличие userId в массиве likes
+  const isLiked = data.likes.some(like => like._id === userId);
   if (isLiked) {
-    cardLikeButton.classList.add('card__like-button_is-active'); // Добавляем класс, если лайк стоит
+    cardLikeButton.classList.add('card__like-button_is-active');
   }
 
   // Добавление обработчиков событий
   cardImage.addEventListener('click', () => handleImageClick(data.link, data.alt, data.name));
-  cardLikeButton.addEventListener('click', () => likeCard(cardElement, data._id, userId));
+  cardLikeButton.addEventListener('click', () => likeCard(data._id, cardLikeButton, cardLikeCounter));
   cardDeleteButton.addEventListener('click', () => deleteCard(cardElement, data._id));
 
   return cardElement;
@@ -46,10 +46,7 @@ function handleCardDelete(cardElement, cardId, deleteUserCard) {
 }
 
 // Функция для обработки лайков
-function handleCardLike(cardElement, cardId, userId, putCardLike, deleteCardLike) {
-  const cardLikeButton = cardElement.querySelector('.card__like-button');
-  const cardLikeCounter = cardElement.querySelector('.card__like-counter');
-
+function handleCardLike(cardId, cardLikeButton, cardLikeCounter, putCardLike, deleteCardLike) {
   if (cardLikeButton.classList.contains('card__like-button_is-active')) {
     // Если лайк уже стоит — удаляем его
     deleteCardLike(cardId)

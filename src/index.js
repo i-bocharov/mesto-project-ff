@@ -102,7 +102,7 @@ function handleFormSubmitNewCard(evt) {
     .then((newCardData) => {
       const newCard = createCard(newCardData, cardTemplate, userData._id, {
         deleteCard: (cardElement, cardId) => handleCardDelete(cardElement, cardId, deleteUserCard),
-        likeCard: (cardElement, cardId, userId) => handleCardLike(cardElement, cardId, userId, putCardLike, deleteCardLike),
+        likeCard: (cardId, cardLikeButton, cardLikeCounter) => handleCardLike(cardId, cardLikeButton, cardLikeCounter, putCardLike, deleteCardLike),
         handleImageClick
       });
 
@@ -220,7 +220,7 @@ Promise.all([getUserData(), getCardsData()])
 
       const cardElement = createCard(cardData, cardTemplate, user._id, {
         deleteCard: (cardElement, cardId) => handleCardDelete(cardElement, cardId, deleteUserCard),
-        likeCard: (cardElement, cardId, userId) => handleCardLike(cardElement, cardId, userId, putCardLike, deleteCardLike),
+        likeCard: (cardId, cardLikeButton, cardLikeCounter) => handleCardLike(cardId, cardLikeButton, cardLikeCounter, putCardLike, deleteCardLike),
         handleImageClick
       });
       renderCard(cardElement, cardList);
