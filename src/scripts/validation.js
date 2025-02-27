@@ -1,4 +1,4 @@
-// Validation
+// Функция для отображения ошибки валидации
 function showInputError(formElement, inputElement, errorMessage, validationConfig) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
@@ -7,6 +7,7 @@ function showInputError(formElement, inputElement, errorMessage, validationConfi
   errorElement.classList.add(validationConfig.errorClass);
 };
 
+// Функция для скрытия ошибки валидации
 function hideInputError(formElement, inputElement, validationConfig) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
@@ -15,6 +16,7 @@ function hideInputError(formElement, inputElement, validationConfig) {
   errorElement.textContent = '';
 }
 
+// Функция для проверки валидности инпута
 function isValid(formElement, inputElement, validationConfig) {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -29,6 +31,7 @@ function isValid(formElement, inputElement, validationConfig) {
   }
 }
 
+// Функция для установки слушателей событий на все инпуты формы
 function setEventListeners(formElement, validationConfig) {
   const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
   const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
@@ -42,6 +45,7 @@ function setEventListeners(formElement, validationConfig) {
   });
 }
 
+// Функция для включения валидации на всех формах
 function enableValidation(validationConfig) {
   const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
 
@@ -50,12 +54,14 @@ function enableValidation(validationConfig) {
   });
 }
 
+// Функция для проверки наличия хотя бы одного невалидного инпута в форме
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   })
 }
 
+// Функция для переключения состояния кнопки отправки формы
 function toggleButtonState(inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
@@ -64,6 +70,7 @@ function toggleButtonState(inputList, buttonElement) {
   }
 }
 
+// Функция для очистки валидации формы
 function clearValidation(formElement, validationConfig) {
   const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
   const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);

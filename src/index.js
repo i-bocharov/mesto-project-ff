@@ -113,6 +113,8 @@ function handleFormSubmitNewCard(evt) {
 
       evt.target.reset();
 
+      clearValidation(formNewPlace, validationConfig);
+
       closeModal(popupTypeNewCard);
     })
     .catch((err) => {
@@ -135,6 +137,8 @@ function handleFormSubmitNewAvatar(evt) {
       profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
 
       evt.target.reset();
+
+      clearValidation(formNewAvatar, validationConfig);
 
       closeModal(popupTypeNewAvatar);
     })
@@ -169,19 +173,23 @@ function openProfilePopup() {
 }
 
 // Функция для открытия модального окна создания новой карточки
-function openNewCardPopup(evt) {
-  clearValidation(formNewPlace, validationConfig);
-
+function openNewCardPopup() {
   openModal(popupTypeNewCard);
+}
+
+// Функция для открытия модального окна изменения аватара
+function openNewAvatarPopup() {
+  openModal(popupTypeNewAvatar);
 }
 
 // Слушатели событий
 profileEditButton.addEventListener('click', openProfilePopup);
 profileAddButton.addEventListener('click', openNewCardPopup);
-profileAvatarEditButton.addEventListener('click', () => {
-  clearValidation(formNewAvatar, validationConfig);
-  openModal(popupTypeNewAvatar);
-});
+profileAvatarEditButton.addEventListener('click', openNewAvatarPopup);
+
+formEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
+formNewPlace.addEventListener('submit', handleFormSubmitNewCard);
+formNewAvatar.addEventListener('submit', handleFormSubmitNewAvatar);
 
 modalPopups.forEach(modalPopup => {
   const popupCloseButton = modalPopup.querySelector('.popup__close');
@@ -198,10 +206,6 @@ modalPopups.forEach(modalPopup => {
     }
   });
 });
-
-formEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
-formNewPlace.addEventListener('submit', handleFormSubmitNewCard);
-formNewAvatar.addEventListener('submit', handleFormSubmitNewAvatar);
 
 // Получение данных с сервера
 let userData;
